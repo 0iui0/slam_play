@@ -2,6 +2,7 @@
 // Created by hyj on 18-11-11.
 //
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <random>
 #include <Eigen/Core>
@@ -9,7 +10,8 @@
 #include <Eigen/Eigenvalues>
 
 struct Pose {
-    Pose(Eigen::Matrix3d R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(t) {};
+    // Clang-Tidy: Parameter 't' is passed by value and only copied once; consider moving it to avoid unnecessary copies
+    Pose(const Eigen::Matrix3d& R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {};
     Eigen::Matrix3d Rwc;
     Eigen::Quaterniond qwc;
     Eigen::Vector3d twc;
@@ -35,7 +37,7 @@ int main() {
                 radius * cos(theta) - radius,
                 radius * sin(theta),
                 1 * sin(2 * theta));
-        camera_pose.push_back(Pose(R, t));
+        camera_pose.emplace_back(R, t);
     }
 
     // 随机数生成三维特征点
