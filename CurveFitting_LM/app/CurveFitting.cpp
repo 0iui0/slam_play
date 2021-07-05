@@ -27,16 +27,16 @@ public:
     // 计算曲线模型误差
     void ComputeResidual() override {
         Vec3 abc = verticies_[0]->Parameters();  // 估计的参数
-        residual_(0) = (abc(0) * x_ * x_ + abc(1) * x_ + abc(2)) - y_;  // 构建残差
+        residual_(0) = std::exp(abc(0) * x_ * x_ + abc(1) * x_ + abc(2)) - y_;  // 构建残差
     }
 
     // 计算残差对变量的雅克比
     void ComputeJacobians() override {
         Vec3 abc = verticies_[0]->Parameters();
-        double exp_y = (abc(0) * x_ * x_ + abc(1) * x_ + abc(2));
+        double exp_y = std::exp(abc(0) * x_ * x_ + abc(1) * x_ + abc(2));
 
         Eigen::Matrix<double, 1, 3> jaco_abc;  // 误差为1维，状态量 3 个，所以是 1x3 的雅克比矩阵
-        jaco_abc << x_ * x_, x_, 1;
+        jaco_abc << x_ * x_ * exp_y, x_ * exp_y, 1 * exp_y;
         jacobians_[0] = jaco_abc;
     }
 
