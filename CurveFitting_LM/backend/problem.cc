@@ -28,9 +28,9 @@ namespace myslam {
             verticies_marg_.clear();
         }
 
-        Problem::~Problem() {}
+        Problem::~Problem() = default;
 
-        bool Problem::AddVertex(std::shared_ptr<Vertex> vertex) {
+        bool Problem::AddVertex(const std::shared_ptr<Vertex> &vertex) {
             if (verticies_.find(vertex->Id()) != verticies_.end()) {
                 // LOG(WARNING) << "Vertex " << vertex->Id() << " has been added before";
                 return false;
@@ -42,7 +42,7 @@ namespace myslam {
         }
 
 
-        bool Problem::AddEdge(shared_ptr<Edge> edge) {
+        bool Problem::AddEdge(const shared_ptr<Edge> &edge) {
             if (edges_.find(edge->Id()) == edges_.end()) {
                 edges_.insert(pair<ulong, std::shared_ptr<Edge>>(edge->Id(), edge));
             } else {
@@ -58,9 +58,7 @@ namespace myslam {
 
 
         bool Problem::Solve(int iterations) {
-
-
-            if (edges_.size() == 0 || verticies_.size() == 0) {
+            if (edges_.empty() || verticies_.empty()) {
                 std::cerr << "\nCannot solve problem without edges or verticies" << std::endl;
                 return false;
             }
@@ -80,8 +78,8 @@ namespace myslam {
                           << std::endl;
                 bool oneStepSuccess = false;
                 int false_cnt = 0;
-                while (!oneStepSuccess)  // 不断尝试 Lambda, 直到成功迭代一步
-                {
+                // 不断尝试 Lambda, 直到成功迭代一步
+                while (!oneStepSuccess) {
                     // setLambda
                     AddLambdatoHessianLM();
                     // 第四步，解线性方程 H X = B
@@ -137,7 +135,7 @@ namespace myslam {
 
             // Note:: verticies_ 是 map 类型的, 顺序是按照 id 号排序的
             // 统计带估计的所有变量的总维度
-            for (auto vertex: verticies_) {
+            for (const auto &vertex: verticies_) {
                 ordering_generic_ += vertex.second->LocalDimension();  // 所有的优化变量总维数
             }
         }
@@ -213,7 +211,7 @@ namespace myslam {
         }
 
         void Problem::UpdateStates() {
-            for (auto vertex: verticies_) {
+            for (const auto &vertex: verticies_) {
                 ulong idx = vertex.second->OrderingId();
                 ulong dim = vertex.second->LocalDimension();
                 VecX delta = delta_x_.segment(idx, dim);
@@ -224,7 +222,7 @@ namespace myslam {
         }
 
         void Problem::RollbackStates() {
-            for (auto vertex: verticies_) {
+            for (const auto &vertex: verticies_) {
                 ulong idx = vertex.second->OrderingId();
                 ulong dim = vertex.second->LocalDimension();
                 VecX delta = delta_x_.segment(idx, dim);
@@ -240,7 +238,7 @@ namespace myslam {
             currentLambda_ = -1.;
             currentChi_ = 0.0;
             // TODO:: robust cost chi2
-            for (auto edge: edges_) {
+            for (const auto &edge: edges_) {
                 currentChi_ += edge.second->Chi2();
             }
             if (err_prior_.rows() > 0)
@@ -283,14 +281,14 @@ namespace myslam {
             // recompute residuals after update state
             // 统计所有的残差
             double tempChi = 0.0;
-            for (auto edge: edges_) {
+            for (const auto &edge: edges_) {
                 edge.second->ComputeResidual();
                 tempChi += edge.second->Chi2();
             }
 
             double rho = (currentChi_ - tempChi) / scale;
-            if (rho > 0 && isfinite(tempChi))   // last step was good, 误差在下降
-            {
+            // last step was good, 误差在下降
+            if (rho > 0 && isfinite(tempChi)) {
                 double alpha = 1. - pow((2 * rho - 1), 3);
                 alpha = std::min(alpha, 2. / 3.);
                 double scaleFactor = (std::max)(1. / 3., alpha);

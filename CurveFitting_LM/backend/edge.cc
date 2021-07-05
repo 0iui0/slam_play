@@ -10,10 +10,13 @@ namespace myslam {
 
         unsigned long global_edge_id = 0;
 
-        Edge::Edge(int residual_dimension, int num_verticies,
+        Edge::Edge(int residual_dimension,
+                   int num_verticies,
                    const std::vector<std::string> &verticies_types) {
             residual_.resize(residual_dimension, 1);
-//    verticies_.resize(num_verticies);      // TODO:: 这里可能会存在问题，比如这里resize了3个空,后续调用edge->addVertex. 使得vertex前面会存在空元素
+
+            // TODO:: 这里可能会存在问题，比如这里resize了3个空,后续调用edge->addVertex. 使得vertex前面会存在空元素
+            // verticies_.resize(num_verticies);
             if (!verticies_types.empty())
                 verticies_types_ = verticies_types;
             jacobians_.resize(num_verticies);
@@ -27,7 +30,7 @@ namespace myslam {
 //            << ", num_verticies="<<num_verticies<<", id_="<<id_<<endl;
         }
 
-        Edge::~Edge() {}
+        Edge::~Edge() = default;
 
         double Edge::Chi2() {
             // TODO::  we should not Multiply information here, because we have computed Jacobian = sqrt_info * Jacobian

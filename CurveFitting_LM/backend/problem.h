@@ -41,7 +41,7 @@ namespace myslam {
 
             ~Problem();
 
-            bool AddVertex(std::shared_ptr<Vertex> vertex);
+            bool AddVertex(const std::shared_ptr<Vertex>& vertex);
 
             /**
              * remove a vertex
@@ -49,7 +49,7 @@ namespace myslam {
              */
             bool RemoveVertex(std::shared_ptr<Vertex> vertex);
 
-            bool AddEdge(std::shared_ptr<Edge> edge);
+            bool AddEdge(const std::shared_ptr<Edge>& edge);
 
             bool RemoveEdge(std::shared_ptr<Edge> edge);
 
@@ -136,12 +136,12 @@ namespace myslam {
             bool IsGoodStepInLM();
 
             /// PCG 迭代线性求解器
-            VecX PCGSolver(const MatXX &A, const VecX &b, int maxIter);
+            static VecX PCGSolver(const MatXX &A, const VecX &b, int maxIter);
 
-            double currentLambda_;
-            double currentChi_;
-            double stopThresholdLM_;    // LM 迭代退出阈值条件
-            double ni_;                 //控制 Lambda 缩放大小
+            double currentLambda_{};
+            double currentChi_{};
+            double stopThresholdLM_{};    // LM 迭代退出阈值条件
+            double ni_{};                 //控制 Lambda 缩放大小
 
             ProblemType problemType_;
 
