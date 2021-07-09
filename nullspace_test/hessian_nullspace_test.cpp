@@ -11,7 +11,7 @@
 
 struct Pose {
     // Clang-Tidy: Parameter 't' is passed by value and only copied once; consider moving it to avoid unnecessary copies
-    Pose(const Eigen::Matrix3d& R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {};
+    Pose(const Eigen::Matrix3d &R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {};
     Eigen::Matrix3d Rwc;
     Eigen::Quaterniond qwc;
     Eigen::Vector3d twc;
@@ -67,19 +67,23 @@ int main() {
             Eigen::Matrix<double, 2, 3> jacobian_Pj = jacobian_uv_Pc * Rcw;
             Eigen::Matrix<double, 2, 6> jacobian_Ti;
             jacobian_Ti <<
-                    -x * y * fx / z_2,
-                    (1 + x * x / z_2) * fx, -y / z * fx,
-                    fx / z, 0, -x * fx / z_2,
+                        -x * y * fx / z_2,
+                    (1 + x * x / z_2) * fx,
+                    -y / z * fx,
+                    fx / z,
+                    0,
+                    -x * fx / z_2,
                     -(1 + y * y / z_2) * fy,
                     x * y / z_2 * fy,
                     x / z * fy,
                     0,
-                    fy / z, -y * fy / z_2;
+                    fy / z,
+                    -y * fy / z_2;
 
-            H.block(i * 6,i * 6,6,6) += jacobian_Ti.transpose() * jacobian_Ti;
+            H.block(i * 6, i * 6, 6, 6) += jacobian_Ti.transpose() * jacobian_Ti;
             /// 请补充完整作业信息矩阵块的计算
-            // H.block(j*3 + 6*poseNums,j*3 + 6*poseNums,3,3) +=?????
-            // H.block(i*6,j*3 + 6*poseNums, 6,3) += ???;
+            H.block(j * 3 + 6 * poseNums, j * 3 + 6 * poseNums, 3, 3) += jacobian_Pj.transpose() * jacobian_Pj;
+            H.block(i * 6, j * 3 + 6 * poseNums, 6, 3) += jacobian_Ti.transpose() * jacobian_Pj;
             H.block(j * 3 + 6 * poseNums, i * 6, 3, 6) += jacobian_Pj.transpose() * jacobian_Ti;
         }
     }
