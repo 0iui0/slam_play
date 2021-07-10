@@ -1,7 +1,7 @@
 #pragma once
 
 #include "backend/eigen_types.h"
-#include "sophus/so3.hpp"
+#include "thirdparty/Sophus/sophus/so3.hpp"
 
 namespace myslam {
 namespace backend {

@@ -1,5 +1,5 @@
 
-#include <sophus/se3.hpp>
+#include "thirdparty/Sophus/sophus/se3.hpp"
 #include "backend/vertex_pose.h"
 #include "backend/vertex_motion.h"
 #include "backend/edge_imu.h"

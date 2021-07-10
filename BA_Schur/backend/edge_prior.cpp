@@ -2,7 +2,7 @@
 // Created by heyijia on 19-1-30.
 //
 
-#include <sophus/se3.hpp>
+#include "thirdparty/Sophus/sophus/se3.hpp"
 
 #include "edge_prior.h"
 #include "backend/vertex_pose.h"
