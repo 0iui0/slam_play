@@ -325,9 +325,7 @@ namespace Sophus {
          *
          * No direct write access is given to ensure the quaternion stays normalized.
          */
-        EIGEN_STRONG_inline ConstQuaternionReference
-
-        unit_quaternion() const {
+        inline ConstQuaternionReference unit_quaternion() const {
             return static_cast<const Derived *> ( this )->unit_quaternion();
         }
 
@@ -591,7 +589,7 @@ namespace Sophus {
     private:
         // Mutator of unit_quaternion is private so users are hampered
         // from setting non-unit quaternions.
-        EIGEN_STRONG_inline QuaternionReference
+        inline QuaternionReference
 
         unit_quaternion_nonconst() {
             return static_cast<Derived *> ( this )->unit_quaternion_nonconst();
@@ -700,7 +698,7 @@ namespace Sophus {
          *
          * No direct write access is given to ensure the quaternion stays normalized.
          */
-        EIGEN_STRONG_inline ConstQuaternionReference
+        inline ConstQuaternionReference
 
         unit_quaternion() const {
             return unit_quaternion_;
@@ -709,7 +707,7 @@ namespace Sophus {
     protected:
         // Mutator of unit_quaternion is protected so users are hampered
         // from setting non-unit quaternions.
-        EIGEN_STRONG_inline QuaternionReference
+        inline QuaternionReference
 
         unit_quaternion_nonconst() {
             return unit_quaternion_;
@@ -766,7 +764,7 @@ namespace Eigen {
         using Base::operator*=;
         using Base::operator*;
 
-        EIGEN_STRONG_inline Map(Scalar *coeffs) : unit_quaternion_(coeffs) {
+        inline Map(Scalar *coeffs) : unit_quaternion_(coeffs) {
         }
 
         /**
@@ -774,7 +772,7 @@ namespace Eigen {
          *
          * No direct write access is given to ensure the quaternion stays normalized.
          */
-        EIGEN_STRONG_inline ConstQuaternionReference
+        inline ConstQuaternionReference
 
         unit_quaternion() const {
             return unit_quaternion_;
@@ -783,7 +781,7 @@ namespace Eigen {
     protected:
         // Mutator of unit_quaternion is protected so users are hampered
         // from setting non-unit quaternions.
-        EIGEN_STRONG_inline QuaternionReference
+        inline QuaternionReference
 
         unit_quaternion_nonconst() {
             return unit_quaternion_;
@@ -832,7 +830,7 @@ namespace Eigen {
         using Base::operator*=;
         using Base::operator*;
 
-        EIGEN_STRONG_inline Map(const Scalar *coeffs) : unit_quaternion_(coeffs) {
+        inline Map(const Scalar *coeffs) : unit_quaternion_(coeffs) {
         }
 
         /**
@@ -840,7 +838,7 @@ namespace Eigen {
          *
          * No direct write access is given to ensure the quaternion stays normalized.
          */
-        EIGEN_STRONG_inline const ConstQuaternionReference
+        inline const ConstQuaternionReference
 
         unit_quaternion() const {
             return unit_quaternion_;

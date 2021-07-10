@@ -34,8 +34,8 @@ option(BUILD_TESTS "Build test for slam course" No)
 
 # third party libs
 # eigen
-find_package(Eigen REQUIRED)
-include_directories(${EIGEN_INCLUDE_DIR})
+find_package(Eigen3 REQUIRED)
+include_directories("/opt/homebrew/include/eigen3")
 
 # opencv
 find_package(OpenCV REQUIRED)

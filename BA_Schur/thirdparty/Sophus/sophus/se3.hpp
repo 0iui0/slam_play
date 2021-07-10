@@ -285,7 +285,7 @@ namespace Sophus {
         /**
          * \brief Mutator of SO3 group
          */
-        EIGEN_STRONG_inline SO3Reference
+        inline SO3Reference
 
         so3() {
             return static_cast<Derived *> ( this )->so3();
@@ -294,7 +294,7 @@ namespace Sophus {
         /**
          * \brief Accessor of SO3 group
          */
-        EIGEN_STRONG_inline ConstSO3Reference
+        inline ConstSO3Reference
 
         so3() const {
             return static_cast<const Derived *> ( this )->so3();
@@ -326,7 +326,7 @@ namespace Sophus {
         /**
          * \brief Mutator of translation vector
          */
-        EIGEN_STRONG_inline TranslationReference
+        inline TranslationReference
 
         translation() {
             return static_cast<Derived *> ( this )->translation();
@@ -335,7 +335,7 @@ namespace Sophus {
         /**
          * \brief Accessor of translation vector
          */
-        EIGEN_STRONG_inline ConstTranslationReference
+        inline ConstTranslationReference
 
         translation() const {
             return static_cast<const Derived *> ( this )->translation();
@@ -708,7 +708,7 @@ namespace Sophus {
          *
          * /see normalize()
          */
-        EIGEN_STRONG_inline Scalar
+        inline Scalar
         *
 
         data() {
@@ -721,7 +721,7 @@ namespace Sophus {
          *
          * Const version of data().
          */
-        EIGEN_STRONG_inline const Scalar
+        inline const Scalar
         *
 
         data() const {
@@ -732,7 +732,7 @@ namespace Sophus {
         /**
          * \brief Accessor of SO3
          */
-        EIGEN_STRONG_inline SO3Reference
+        inline SO3Reference
 
         so3() {
             return so3_;
@@ -741,7 +741,7 @@ namespace Sophus {
         /**
          * \brief Mutator of SO3
          */
-        EIGEN_STRONG_inline ConstSO3Reference
+        inline ConstSO3Reference
 
         so3() const {
             return so3_;
@@ -750,7 +750,7 @@ namespace Sophus {
         /**
          * \brief Mutator of translation vector
          */
-        EIGEN_STRONG_inline TranslationReference
+        inline TranslationReference
 
         translation() {
             return translation_;
@@ -759,7 +759,7 @@ namespace Sophus {
         /**
          * \brief Accessor of translation vector
          */
-        EIGEN_STRONG_inline ConstTranslationReference
+        inline ConstTranslationReference
 
         translation() const {
             return translation_;
@@ -822,7 +822,7 @@ namespace Eigen {
         using Base::operator*=;
         using Base::operator*;
 
-        EIGEN_STRONG_inline Map(Scalar *coeffs)
+        inline Map(Scalar *coeffs)
                 : so3_(coeffs),
                   translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
         }
@@ -830,7 +830,7 @@ namespace Eigen {
         /**
          * \brief Mutator of SO3
          */
-        EIGEN_STRONG_inline SO3Reference
+        inline SO3Reference
 
         so3() {
             return so3_;
@@ -839,7 +839,7 @@ namespace Eigen {
         /**
          * \brief Accessor of SO3
          */
-        EIGEN_STRONG_inline ConstSO3Reference
+        inline ConstSO3Reference
 
         so3() const {
             return so3_;
@@ -848,7 +848,7 @@ namespace Eigen {
         /**
          * \brief Mutator of translation vector
          */
-        EIGEN_STRONG_inline TranslationReference
+        inline TranslationReference
 
         translation() {
             return translation_;
@@ -857,7 +857,7 @@ namespace Eigen {
         /**
          * \brief Accessor of translation vector
          */
-        EIGEN_STRONG_inline ConstTranslationReference
+        inline ConstTranslationReference
 
         translation() const {
             return translation_;
@@ -912,19 +912,19 @@ namespace Eigen {
         using Base::operator*=;
         using Base::operator*;
 
-        EIGEN_STRONG_inline Map(const Scalar *coeffs)
+        inline Map(const Scalar *coeffs)
                 : so3_(coeffs),
                   translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
         }
 
-        EIGEN_STRONG_inline Map(const Scalar *trans_coeffs, const Scalar *rot_coeffs)
+        inline Map(const Scalar *trans_coeffs, const Scalar *rot_coeffs)
                 : translation_(trans_coeffs), so3_(rot_coeffs) {
         }
 
         /**
          * \brief Accessor of SO3
          */
-        EIGEN_STRONG_inline ConstSO3Reference
+        inline ConstSO3Reference
 
         so3() const {
             return so3_;
@@ -933,7 +933,7 @@ namespace Eigen {
         /**
          * \brief Accessor of translation vector
          */
-        EIGEN_STRONG_inline ConstTranslationReference
+        inline ConstTranslationReference
 
         translation() const {
             return translation_;
