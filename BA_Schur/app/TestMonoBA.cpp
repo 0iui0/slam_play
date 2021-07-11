@@ -15,9 +15,9 @@ struct Frame {
     Frame(Eigen::Matrix3d R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(t) {}; // 构造函数初始化
     Eigen::Matrix3d Rwc;      // 矩阵表示旋转
     Eigen::Quaterniond qwc;   // 四元数表旋转
-    Eigen::Vector3d twc;      
+    Eigen::Vector3d twc;
     /*【unordered_map 哈希表对应的容器。哈希表是根据关键码值而直接进行访问的数据结构，也就是说，它通过把关键码值映射到表中一个位置来访问记录，
-    以加快查找的速度，这个映射函数叫做散列函数】 */ 
+    以加快查找的速度，这个映射函数叫做散列函数】 */
     unordered_map<int, Eigen::Vector3d> featurePerId; // 该帧观测到的特征以及特征id，
 };
 
@@ -38,7 +38,8 @@ void GetSimDataInWordFrame(vector<Frame> &cameraPoses, vector<Eigen::Vector3d> &
         // 绕 z轴 旋转
         Eigen::Matrix3d R;
         R = Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitZ()); // 角度和轴
-        Eigen::Vector3d t = Eigen::Vector3d(radius * cos(theta) - radius, radius * sin(theta), 1 * sin(2 * theta)); // r*cos(theta) - r, r*sin(theta), 1*sin(2*theta)
+        Eigen::Vector3d t = Eigen::Vector3d(radius * cos(theta) - radius, radius * sin(theta),
+                                            1 * sin(2 * theta)); // r*cos(theta) - r, r*sin(theta), 1*sin(2*theta)
         cameraPoses.push_back(Frame(R, t)); // 返回R t
     }
 
@@ -59,7 +60,7 @@ void GetSimDataInWordFrame(vector<Frame> &cameraPoses, vector<Eigen::Vector3d> &
             Pc[0] += noise_pdf(generator);  // 高斯噪声
             Pc[1] += noise_pdf(generator);
             /*【C++标准程序库中凡是“必须返回两个值”的函数，也都会利用pair对象，pair可以将两个值视为一个单元；make_pair 无需写出型别，就可以生成一个pair对象】*/
-            cameraPoses[i].featurePerId.insert(make_pair(j, Pc)); 
+            cameraPoses[i].featurePerId.insert(make_pair(j, Pc));
         }
     }
 }
@@ -76,7 +77,8 @@ int main() {
     Problem problem(Problem::ProblemType::SLAM_PROBLEM);
 
     // 所有 Pose
-    vector<shared_ptr<VertexPose> > vertexCams_vec;         /*【shared_ptr智能指针，用于管理可以由多个智能指针共同拥有的动态分配对象，特别是，类型shared_ptr<T>用于管理T类型对象的所有权】 */
+    /*【shared_ptr智能指针，用于管理可以由多个智能指针共同拥有的动态分配对象，特别是，类型shared_ptr<T>用于管理T类型对象的所有权】 */
+    vector<shared_ptr<VertexPose> > vertexCams_vec;
     for (size_t i = 0; i < cameras.size(); ++i) {
         shared_ptr<VertexPose> vertexCam(new VertexPose());         /*【new：1、开辟单变量地址空间 2、开辟数组空间】 */
         Eigen::VectorXd pose(7); // 实际参与的是6自由度，此处为3+4，为了方便用四元数表示旋转
@@ -84,13 +86,13 @@ int main() {
         pose << cameras[i].twc, cameras[i].qwc.x(), cameras[i].qwc.y(), cameras[i].qwc.z(), cameras[i].qwc.w();
         vertexCam->SetParameters(pose);
 
-        if(i < 2)
+        if (i < 2)
             vertexCam->SetFixed(); // 固定相机初始值
 
         problem.AddVertex(vertexCam);
         vertexCams_vec.push_back(vertexCam);
 
-        
+
     }
 
     // 所有 Point 及 edge
@@ -131,20 +133,21 @@ int main() {
             edge_vertex.push_back(vertexCams_vec[j]);
             edge->SetVertex(edge_vertex);
 
-            problem.AddEdge(edge); 
+            problem.AddEdge(edge);
         }
     }
 
     problem.Solve(5); // 迭代5步
- 
+
     std::cout << "\nCompare MonoBA results after opt..." << std::endl;
-    for (size_t k = 0; k < allPoints.size(); k+=1) {
+    for (size_t k = 0; k < allPoints.size(); k += 1) {
         std::cout << "after opt, point " << k << " : gt " << 1. / points[k].z() << " ,noise "
                   << noise_invd[k] << " ,opt " << allPoints[k]->Parameters() << std::endl;
     }
-    std::cout<<"------------ pose translation ----------------"<<std::endl;
+    std::cout << "------------ pose translation ----------------" << std::endl;
     for (int i = 0; i < vertexCams_vec.size(); ++i) {
-        std::cout<<"translation after opt: "<< i <<" :"<< vertexCams_vec[i]->Parameters().head(3).transpose() << " || gt: "<<cameras[i].twc.transpose()<<std::endl;
+        std::cout << "translation after opt: " << i << " :" << vertexCams_vec[i]->Parameters().head(3).transpose()
+                  << " || gt: " << cameras[i].twc.transpose() << std::endl;
     }
     /// 优化完成后，第一帧相机的 pose 平移（x,y,z）不再是原点 0,0,0. 说明向零空间发生了漂移。
     /// 解决办法： fix 第一帧和第二帧，固定 7 自由度。 或者加上非常大的先验值。
