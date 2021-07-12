@@ -317,11 +317,11 @@ namespace myslam {
                         MatXX hessian = JtW * jacobian_j; // hessian矩阵 J_i^T * \Sigma^{-1} * J_j
                         // 所有的信息矩阵叠加起来
                         // TODO:: home work. 完成 H index 的填写.
-//                        H.block(index_i, index_j, dim_i, dim_j).noalias() += hessian;
+                        H.block(index_i, index_j, dim_i, dim_j).noalias() += hessian;
                         if (j != i) {
                             // 对称的下三角
                             // TODO:: home work. 完成 H index 的填写.
-//                            H.block(index_j, index_i, dim_j, dim_i).noalias() += hessian.transpose();
+                            H.block(index_j, index_i, dim_j, dim_i).noalias() += hessian.transpose();
                         }
                     }
                     // std::cout << "H is :" << std::endl << H << std::endl;
@@ -370,25 +370,25 @@ namespace myslam {
                 int marg_size = ordering_landmarks_;
 
                 // TODO:: home work. 完成矩阵块取值，Hmm，Hpm，Hmp，bpp，bmm
-//                MatXX Hpp = Hessian_.block(0, 0, reserve_size, reserve_size); // 对应landmark
-//                MatXX Hmm = Hessian_.block(reserve_size, reserve_size, marg_size, marg_size); // 对应landmark
-//                MatXX Hpm = Hessian_.block(0, reserve_size, reserve_size, marg_size);
-//                MatXX Hmp = Hessian_.block(reserve_size, 0, marg_size, reserve_size);
-//                VecX bpp = b_.segment(0, reserve_size);
-//                VecX bmm = b_.segment(reserve_size, marg_size);
+                MatXX Hpp = Hessian_.block(0, 0, reserve_size, reserve_size); // 对应landmark
+                MatXX Hmm = Hessian_.block(reserve_size, reserve_size, marg_size, marg_size); // 对应landmark
+                MatXX Hpm = Hessian_.block(0, reserve_size, reserve_size, marg_size);
+                MatXX Hmp = Hessian_.block(reserve_size, 0, marg_size, reserve_size);
+                VecX bpp = b_.segment(0, reserve_size);
+                VecX bmm = b_.segment(reserve_size, marg_size);
 
                 // Hmm 是对角线矩阵，它的求逆可以直接为对角线块分别求逆，如果是逆深度，对角线块为1维的，则直接为对角线的倒数，这里可以加速
                 MatXX Hmm_inv(MatXX::Zero(marg_size, marg_size));
                 for (const auto &landmarkVertex : idx_landmark_vertices_) {
                     int idx = landmarkVertex.second->OrderingId() - reserve_size;
                     int size = landmarkVertex.second->LocalDimension();
-//                    Hmm_inv.block(idx, idx, size, size) = Hmm.block(idx, idx, size, size).inverse();
+                    Hmm_inv.block(idx, idx, size, size) = Hmm.block(idx, idx, size, size).inverse();
                 }
 
                 // TODO:: home work. 完成舒尔补 Hpp, bpp 代码
-//                MatXX tempH = Hpm * Hmm_inv;
-//                H_pp_schur_ = Hpp - tempH * Hpm.transpose();
-//                b_pp_schur_ = bpp - tempH * bmm; // 边际概率
+                MatXX tempH = Hpm * Hmm_inv;
+                H_pp_schur_ = Hpp - tempH * Hpm.transpose();
+                b_pp_schur_ = bpp - tempH * bmm; // 边际概率
 
                 // step2: solve Hpp * delta_x = bpp
                 VecX delta_x_pp(VecX::Zero(reserve_size));
@@ -404,7 +404,7 @@ namespace myslam {
 
                 // TODO:: home work. step3: solve landmark
                 VecX delta_x_ll(marg_size);
-//                delta_x_ll = Hmm_inv * (bmm - Hpm.transpose() * delta_x_pp);
+                delta_x_ll = Hmm_inv * (bmm - Hpm.transpose() * delta_x_pp);
                 delta_x_.tail(marg_size) = delta_x_ll;
 
             }
@@ -489,7 +489,7 @@ namespace myslam {
             double tempChi = 0.0;
             for (const auto &edge: edges_) {
                 edge.second->ComputeResidual();
-//                tempChi += edge.second->Chi2();
+                tempChi += edge.second->Chi2();
             }
             if (err_prior_.size() > 0)
                 tempChi += err_prior_.norm();
@@ -581,8 +581,8 @@ namespace myslam {
             // 将 row i 移动矩阵最下面
             Eigen::MatrixXd temp_rows = H_marg.block(idx, 0, dim, reserve_size);
             Eigen::MatrixXd temp_botRows = H_marg.block(idx + dim, 0, reserve_size - idx - dim, reserve_size);
-//            H_marg.block(idx, 0, reserve_size - idx - dim, reserve_size) = temp_botRows;
-//            H_marg.block(reserve_size - dim, 0, dim, reserve_size) = temp_rows;
+            H_marg.block(idx, 0, reserve_size - idx - dim, reserve_size) = temp_botRows;
+            H_marg.block(reserve_size - dim, 0, dim, reserve_size) = temp_rows;
 
             // 将 col i 移动矩阵最右边
             Eigen::MatrixXd temp_cols = H_marg.block(0, idx, reserve_size, dim); // 从0行，marg 中间那个变量 列开始索引；总变量维度，marg变量维度
@@ -609,15 +609,15 @@ namespace myslam {
                                       saes.eigenvectors().transpose();
 
             // TODO:: home work. 完成舒尔补操作
-//            Eigen::MatrixXd Arm = H_marg.block(m2, 0, n2, m2);
-//            Eigen::MatrixXd Amr = H_marg.block(0, m2, m2, n2);
-//            Eigen::MatrixXd Arr = H_marg.block(m2, m2, n2, n2);
+            Eigen::MatrixXd Arm = H_marg.block(m2, 0, n2, m2);
+            Eigen::MatrixXd Amr = H_marg.block(0, m2, m2, n2);
+            Eigen::MatrixXd Arr = H_marg.block(m2, m2, n2, n2);
 
-//            Eigen::MatrixXd tempB = Arm * Amm_inv;
-//            Eigen::MatrixXd H_prior = Arr - tempB * Amr;
+            Eigen::MatrixXd tempB = Arm * Amm_inv;
+            Eigen::MatrixXd H_prior = Arr - tempB * Amr;
 
             std::cout << "---------- TEST Marg: after marg------------" << std::endl;
-//            std::cout << H_prior << std::endl;
+            std::cout << H_prior << std::endl;
         }
 
     }
