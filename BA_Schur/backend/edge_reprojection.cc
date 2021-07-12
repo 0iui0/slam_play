@@ -1,4 +1,4 @@
-#include <sophus/so3.hpp>
+#include "thirdparty/Sophus/sophus/so3.hpp"
 #include "thirdparty/Sophus/sophus/se3.hpp"
 #include "backend/vertex_pose.h"
 #include "backend/vertex_point_xyz.h"

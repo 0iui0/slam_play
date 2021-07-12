@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <utility>
 #include "backend/vertex_inverse_depth.h"
 #include "backend/vertex_pose.h"
 #include "backend/edge_reprojection.h"
@@ -12,7 +13,7 @@ using namespace std;
  * Frame : 保存每帧的姿态和观测
  */
 struct Frame {
-    Frame(Eigen::Matrix3d R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(t) {}; // 构造函数初始化
+    Frame(const Eigen::Matrix3d& R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {}; // 构造函数初始化
     Eigen::Matrix3d Rwc;      // 矩阵表示旋转
     Eigen::Quaterniond qwc;   // 四元数表旋转
     Eigen::Vector3d twc;
@@ -40,7 +41,7 @@ void GetSimDataInWordFrame(vector<Frame> &cameraPoses, vector<Eigen::Vector3d> &
         R = Eigen::AngleAxisd(theta, Eigen::Vector3d::UnitZ()); // 角度和轴
         Eigen::Vector3d t = Eigen::Vector3d(radius * cos(theta) - radius, radius * sin(theta),
                                             1 * sin(2 * theta)); // r*cos(theta) - r, r*sin(theta), 1*sin(2*theta)
-        cameraPoses.push_back(Frame(R, t)); // 返回R t
+        cameraPoses.emplace_back(R, t); // 返回R t
     }
 
     // 随机数生成三维特征点

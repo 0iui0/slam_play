@@ -47,11 +47,11 @@ public:
      * remove a vertex
      * @param vertex_to_remove
      */
-    bool RemoveVertex(std::shared_ptr<Vertex> vertex);
+    bool RemoveVertex(const std::shared_ptr<Vertex>& vertex);
 
-    bool AddEdge(std::shared_ptr<Edge> edge);
+    bool AddEdge(const std::shared_ptr<Edge>& edge);
 
-    bool RemoveEdge(std::shared_ptr<Edge> edge);
+    bool RemoveEdge(const std::shared_ptr<Edge>& edge);
 
     /**
      * 取得在优化中被判断为outlier部分的边，方便前端去除outlier
@@ -70,10 +70,10 @@ public:
     bool Marginalize(std::shared_ptr<Vertex> frameVertex,
                      const std::vector<std::shared_ptr<Vertex>> &landmarkVerticies);
 
-    bool Marginalize(const std::shared_ptr<Vertex> frameVertex);
+    static bool Marginalize(const std::shared_ptr<Vertex>& frameVertex);
 
     //test compute prior
-    void TestMarginalize();
+    static void TestMarginalize();
 
 private:
 
@@ -87,7 +87,7 @@ private:
     void SetOrdering();
 
     /// set ordering for new vertex in slam problem
-    void AddOrderingSLAM(std::shared_ptr<Vertex> v);
+    void AddOrderingSLAM(const std::shared_ptr<Vertex>& v);
 
     /// 构造大H矩阵
     void MakeHessian();
@@ -107,13 +107,13 @@ private:
     void ComputePrior();
 
     /// 判断一个顶点是否为Pose顶点
-    bool IsPoseVertex(std::shared_ptr<Vertex> v);
+    bool IsPoseVertex(const std::shared_ptr<Vertex>& v);
 
     /// 判断一个顶点是否为landmark顶点
-    bool IsLandmarkVertex(std::shared_ptr<Vertex> v);
+    static bool IsLandmarkVertex(const std::shared_ptr<Vertex>& v);
 
     /// 在新增顶点后，需要调整几个hessian的大小
-    void ResizePoseHessiansWhenAddingPose(std::shared_ptr<Vertex> v);
+    void ResizePoseHessiansWhenAddingPose(const std::shared_ptr<Vertex>& v);
 
     /// 检查ordering是否正确
     bool CheckOrdering();
@@ -121,7 +121,7 @@ private:
     void LogoutVectorSize();
 
     /// 获取某个顶点连接到的边
-    std::vector<std::shared_ptr<Edge>> GetConnectedEdges(std::shared_ptr<Vertex> vertex);
+    std::vector<std::shared_ptr<Edge>> GetConnectedEdges(const std::shared_ptr<Vertex>& vertex);
 
     /// Levenberg
     /// 计算LM算法的初始Lambda
@@ -138,10 +138,10 @@ private:
     /// PCG 迭代线性求解器
     VecX PCGSolver(const MatXX &A, const VecX &b, int maxIter);
 
-    double currentLambda_;
-    double currentChi_;
-    double stopThresholdLM_;    // LM 迭代退出阈值条件
-    double ni_;                 //控制 Lambda 缩放大小
+    double currentLambda_{};
+    double currentChi_{};
+    double stopThresholdLM_{};    // LM 迭代退出阈值条件
+    double ni_{};                 //控制 Lambda 缩放大小
 
     ProblemType problemType_;
 

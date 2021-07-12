@@ -1,5 +1,5 @@
 #include "backend/vertex_pose.h"
-#include "sophus/so3.hpp"
+#include "thirdparty/Sophus/sophus/so3.hpp"
 //#include <iostream>
 namespace myslam {
 namespace backend {
