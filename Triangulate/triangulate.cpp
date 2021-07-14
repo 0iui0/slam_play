@@ -5,6 +5,7 @@
 #include <vector>
 #include <random>
 #include <Eigen/Core>
+#include <Eigen/SVD>
 #include <Eigen/Geometry>
 #include <Eigen/Eigenvalues>
 
@@ -61,10 +62,46 @@ int main() {
     Eigen::Vector3d P_est;           // 结果保存到这个变量
     P_est.setZero();
     /* your code begin */
-    for (int i = 0; i < camera_pose.size(); ++i) {
+    int n = end_frame_id - start_frame_id;// 观测数
+    Eigen::MatrixXd D(2 * n, 4); // 矩阵D初始化 2n×4
+    D.setZero();
+    int k = 0; // D行数
+    Eigen::Matrix<double, 3, 4> pose[poseNums]; // 投影矩阵
+    for (int i = start_frame_id; i < end_frame_id; ++i) {
+        double uk = camera_pose[i].uv(0);
+        double vk = camera_pose[i].uv(1);
+
+        // 逆变换 T^{-1}
+        pose[i].block<3, 3>(0, 0) = camera_pose[i].Rwc.transpose();
+        pose[i].block<3, 1>(0, 3) = -camera_pose[i].Rwc.transpose() * camera_pose[i].twc;
+        D.row(k++) = uk * pose[i].row(2) - pose[i].row(0);
+        D.row(k++) = vk * pose[i].row(2) - pose[i].row(1);
+
+        // Eigen::Matrix3d Rcw = camera_pose[i].Rwc.transpose();
+        // Eigen::Vector3d Pc = -camera_pose[i].Rwc.transpose() * camera_pose[i].twc;
+
+        // Eigen::Vector4d Pk_1, Pk_2, Pk_3; // 投影矩阵 3*4 ，World系到Camera系
+        // Pk_1 << camera_pose[i].Rwc.row(0).transpose(), Pc(0);
+        // Pk_2 << camera_pose[i].Rwc.row(1).transpose(), Pc(1);
+        // Pk_3 << camera_pose[i].Rwc.row(2).transpose(), Pc(2);
+
+        // D.row(k++) = uk * Pk_3.transpose() - Pk_1.transpose();
+        // D.row(k++) = vk * Pk_3.transpose() - Pk_2.transpose();
 
     }
+    Eigen::Matrix4d DTD = D.transpose() * D;
+    // SVD分解
+    Eigen::JacobiSVD<Eigen::MatrixXd> svd(DTD, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::MatrixXd V, S, U;
+    V = svd.matrixV();
+    U = svd.matrixU();
+    S = svd.singularValues();  // 为 \Theta对角线元素
+    std::cout << "DTD :\n" << DTD << std::endl;
+    std::cout << "U :\n" << U << std::endl;
+    std::cout << "S :\n" << S << std::endl;
+    std::cout << "V :\n" << V << std::endl;
 
+    P_est << U(0, 3) / U(3, 3), U(1, 3) / U(3, 3), U(2, 3) / U(3, 3);
     /* your code end */
 
     std::cout << "ground truth: \n" << Pw.transpose() << std::endl;

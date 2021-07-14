@@ -4,6 +4,9 @@ project(Triangulate)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+# 寻找OpenCV库
+include_directories("/opt/local/include/")
+find_package(OpenCV REQUIRED)
 
 # eigen
 find_package(Eigen3 REQUIRED)
