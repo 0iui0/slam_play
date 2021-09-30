@@ -34,7 +34,8 @@ namespace Sophus {
     template<typename _Scalar, int _Options = 0>
     class SO3Group;
 
-    typedef EIGEN_DEPRECATED SO3Group<double> SO3;
+    typedef EIGEN_DEPRECATED SO3Group
+    <double> SO3;
     typedef SO3Group<double> SO3d; /**< double precision SO3 */
     typedef SO3Group<float> SO3f;  /**< single precision SO3 */
 }
@@ -49,24 +50,24 @@ namespace Eigen {
         template<typename _Scalar, int _Options>
         struct traits<Sophus::SO3Group<_Scalar, _Options> > {
             typedef _Scalar Scalar;
-            typedef Quaternion<Scalar> QuaternionType;
+            typedef Quaternion <Scalar> QuaternionType;
         };
 
         template<typename _Scalar, int _Options>
-        struct traits<Map<Sophus::SO3Group<_Scalar>, _Options> >
-                : traits<Sophus::SO3Group<_Scalar, _Options> > {
-            typedef _Scalar Scalar;
-            typedef Map<Quaternion<Scalar>, _Options> QuaternionType;
-        };
+        struct traits<Map < Sophus::SO3Group<_Scalar>, _Options> >
+        : traits<Sophus::SO3Group<_Scalar, _Options> > {
+        typedef _Scalar Scalar;
+        typedef Map <Quaternion<Scalar>, _Options> QuaternionType;
+    };
 
-        template<typename _Scalar, int _Options>
-        struct traits<Map<const Sophus::SO3Group<_Scalar>, _Options> >
-                : traits<const Sophus::SO3Group<_Scalar, _Options> > {
-            typedef _Scalar Scalar;
-            typedef Map<const Quaternion<Scalar>, _Options> QuaternionType;
-        };
+    template<typename _Scalar, int _Options>
+    struct traits<Map<const Sophus::SO3Group<_Scalar>, _Options> >
+            : traits<const Sophus::SO3Group<_Scalar, _Options> > {
+        typedef _Scalar Scalar;
+        typedef Map<const Quaternion <Scalar>, _Options> QuaternionType;
+    };
 
-    }
+}
 }
 
 namespace Sophus {
@@ -98,13 +99,13 @@ namespace Sophus {
         /** \brief group transformations are NxN matrices */
         static const int N = 3;
         /** \brief group transfomation type */
-        typedef Matrix<Scalar, N, N> Transformation;
+        typedef Matrix <Scalar, N, N> Transformation;
         /** \brief point type */
         typedef Matrix<Scalar, 3, 1> Point;
         /** \brief tangent vector type */
         typedef Matrix<Scalar, DoF, 1> Tangent;
         /** \brief adjoint transformation type */
-        typedef Matrix<Scalar, DoF, DoF> Adjoint;
+        typedef Matrix <Scalar, DoF, DoF> Adjoint;
 
 
         /**
@@ -315,7 +316,7 @@ namespace Sophus {
          *
          * The quaternion is normalized to unit length.
          */
-        inline void setQuaternion(const Quaternion<Scalar> &quaternion) {
+        inline void setQuaternion(const Quaternion <Scalar> &quaternion) {
             unit_quaternion_nonconst() = quaternion;
             normalize();
         }
@@ -666,7 +667,7 @@ namespace Sophus {
          * \pre quaternion must not be zero
          */
         inline explicit
-        SO3Group(const Quaternion<Scalar> &quat) : unit_quaternion_(quat) {
+        SO3Group(const Quaternion <Scalar> &quat) : unit_quaternion_(quat) {
             Base::normalize();
         }
 
@@ -713,7 +714,7 @@ namespace Sophus {
             return unit_quaternion_;
         }
 
-        Quaternion<Scalar> unit_quaternion_;
+        Quaternion <Scalar> unit_quaternion_;
     };
 
 } // end namespace
@@ -787,7 +788,8 @@ namespace Eigen {
             return unit_quaternion_;
         }
 
-        Map<Quaternion<Scalar>, _Options> unit_quaternion_;
+        Map<Quaternion < Scalar>, _Options>
+        unit_quaternion_;
     };
 
 /**
@@ -845,7 +847,7 @@ namespace Eigen {
         }
 
     protected:
-        const Map<const Quaternion<Scalar>, _Options> unit_quaternion_;
+        const Map<const Quaternion <Scalar>, _Options> unit_quaternion_;
     };
 
 }

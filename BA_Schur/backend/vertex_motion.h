@@ -5,26 +5,26 @@
 #include "backend/vertex.h"
 
 namespace myslam {
-namespace backend {
+    namespace backend {
 
 /**
  * Motion vertex
  * parameters: v, ba, bg 9 DoF
  * 
  */
-class VertexMotion : public Vertex {
-public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+        class VertexMotion : public Vertex {
+        public:
+            EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
-    VertexMotion() : Vertex(9) {}
+            VertexMotion() : Vertex(9) {}
 
-    std::string TypeInfo() const {
-        return "VertexMotion";
+            std::string TypeInfo() const {
+                return "VertexMotion";
+            }
+
+        };
+
     }
-
-};
-
-}
 }
 
 #endif

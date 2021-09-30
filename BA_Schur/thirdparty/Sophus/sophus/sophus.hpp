@@ -43,12 +43,16 @@ namespace Sophus {
     template<typename Scalar>
     struct SophusConstants {
         EIGEN_ALWAYS_INLINE static
-        const Scalar epsilon() {
+        const Scalar
+
+        epsilon() {
             return static_cast<Scalar> ( 1e-10 );
         }
 
         EIGEN_ALWAYS_INLINE static
-        const Scalar pi() {
+        const Scalar
+
+        pi() {
             return static_cast<Scalar> ( M_PI );
         }
     };

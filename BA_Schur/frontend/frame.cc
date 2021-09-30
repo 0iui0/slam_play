@@ -5,8 +5,8 @@
 #include "frame.h"
 
 namespace myslam {
-namespace frontend {
+    namespace frontend {
 
 
-}
+    }
 }

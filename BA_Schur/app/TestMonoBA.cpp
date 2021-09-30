@@ -13,7 +13,7 @@ using namespace std;
  * Frame : 保存每帧的姿态和观测
  */
 struct Frame {
-    Frame(const Eigen::Matrix3d& R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {}; // 构造函数初始化
+    Frame(const Eigen::Matrix3d &R, Eigen::Vector3d t) : Rwc(R), qwc(R), twc(std::move(t)) {}; // 构造函数初始化
     Eigen::Matrix3d Rwc;      // 矩阵表示旋转
     Eigen::Quaterniond qwc;   // 四元数表旋转
     Eigen::Vector3d twc;

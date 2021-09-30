@@ -19,7 +19,7 @@ vector<double> Dog_leg::getDirection() { // 下降方向
     int dimension = pb.size();
 
     double puLen = getLength(pu);
-    if (puLen >= radius){ //courner case
+    if (puLen >= radius) { //courner case
 
         t = radius / puLen;
         vector<double> pk; // 下降方向Pk

@@ -34,7 +34,8 @@ namespace Sophus {
     template<typename _Scalar, int _Options = 0>
     class SE3Group;
 
-    typedef SE3Group<double> SE3 EIGEN_DEPRECATED;
+    typedef SE3Group<double> SE3
+    EIGEN_DEPRECATED;
     typedef SE3Group<double> SE3d; /**< double precision SE3 */
     typedef SE3Group<float> SE3f;  /**< single precision SE3 */
     typedef Matrix<double, 6, 1> Vector6d;
@@ -61,7 +62,7 @@ namespace Eigen {
         struct traits<Map<Sophus::SE3Group<_Scalar>, _Options> >
                 : traits<Sophus::SE3Group<_Scalar, _Options> > {
             typedef _Scalar Scalar;
-            typedef Map<Matrix<Scalar, 3, 1>, _Options> TranslationType;
+            typedef Map<Matrix < Scalar, 3, 1>, _Options> TranslationType;
             typedef Map<Sophus::SO3Group<Scalar>, _Options> SO3Type;
         };
 
@@ -112,13 +113,13 @@ namespace Sophus {
         /** \brief group transformations are NxN matrices */
         static const int N = 4;
         /** \brief group transfomation type */
-        typedef Matrix<Scalar, N, N> Transformation;
+        typedef Matrix <Scalar, N, N> Transformation;
         /** \brief point type */
         typedef Matrix<Scalar, 3, 1> Point;
         /** \brief tangent vector type */
         typedef Matrix<Scalar, DoF, 1> Tangent;
         /** \brief adjoint transformation type */
-        typedef Matrix<Scalar, DoF, DoF> Adjoint;
+        typedef Matrix <Scalar, DoF, DoF> Adjoint;
 
 
         /**
@@ -270,7 +271,9 @@ namespace Sophus {
          */
         typedef Transformation M3_marcos_dont_like_commas;
 
-        inline         EIGEN_DEPRECATED const M3_marcos_dont_like_commas rotation_matrix() const {
+        inline EIGEN_DEPRECATED const M3_marcos_dont_like_commas
+
+        rotation_matrix() const {
             return so3().matrix();
         }
 
@@ -308,7 +311,7 @@ namespace Sophus {
          *
          * The quaternion is normalized to unit length.
          */
-        inline void setQuaternion(const Quaternion<Scalar> &quat) {
+        inline void setQuaternion(const Quaternion <Scalar> &quat) {
             return so3().setQuaternion(quat);
         }
 
@@ -679,7 +682,7 @@ namespace Sophus {
          *
          * \pre quaternion must not be zero
          */
-        inline SE3Group(const Quaternion<Scalar> &quaternion,
+        inline SE3Group(const Quaternion <Scalar> &quaternion,
                         const Point &translation)
                 : so3_(quaternion), translation_(translation) {
         }
@@ -783,91 +786,96 @@ namespace Eigen {
  */
     template<typename _Scalar, int _Options>
     class Map<Sophus::SE3Group<_Scalar>, _Options>
-            : public Sophus::SE3GroupBase<Map<Sophus::SE3Group<_Scalar>, _Options> > {
-        typedef Sophus::SE3GroupBase<Map<Sophus::SE3Group<_Scalar>, _Options> > Base;
+            : public Sophus::SE3GroupBase<Map < Sophus::SE3Group<_Scalar>, _Options>
+
+    > {
+    typedef Sophus::SE3GroupBase<Map<Sophus::SE3Group<_Scalar>, _Options> > Base;
 
     public:
-        /** \brief scalar type */
-        typedef typename internal::traits<Map>::Scalar Scalar;
-        /** \brief translation reference type */
-        typedef typename internal::traits<Map>::TranslationType &
-                TranslationReference;
-        /** \brief translation const reference type */
-        typedef const typename internal::traits<Map>::TranslationType &
-                ConstTranslationReference;
-        /** \brief SO3 reference type */
-        typedef typename internal::traits<Map>::SO3Type &
-                SO3Reference;
-        /** \brief SO3 const reference type */
-        typedef const typename internal::traits<Map>::SO3Type &
-                ConstSO3Reference;
+    /** \brief scalar type */
+    typedef typename internal::traits<Map>::Scalar Scalar;
+    /** \brief translation reference type */
+    typedef typename internal::traits<Map>::TranslationType &
+            TranslationReference;
+    /** \brief translation const reference type */
+    typedef const typename internal::traits<Map>::TranslationType &
+            ConstTranslationReference;
+    /** \brief SO3 reference type */
+    typedef typename internal::traits<Map>::SO3Type &
+            SO3Reference;
+    /** \brief SO3 const reference type */
+    typedef const typename internal::traits<Map>::SO3Type &
+            ConstSO3Reference;
 
-        /** \brief degree of freedom of group */
-        static const int DoF = Base::DoF;
-        /** \brief number of internal parameters used */
-        static const int num_parameters = Base::num_parameters;
-        /** \brief group transformations are NxN matrices */
-        static const int N = Base::N;
-        /** \brief group transfomation type */
-        typedef typename Base::Transformation Transformation;
-        /** \brief point type */
-        typedef typename Base::Point Point;
-        /** \brief tangent vector type */
-        typedef typename Base::Tangent Tangent;
-        /** \brief adjoint transformation type */
-        typedef typename Base::Adjoint Adjoint;
+    /** \brief degree of freedom of group */
+    static const int DoF = Base::DoF;
+    /** \brief number of internal parameters used */
+    static const int num_parameters = Base::num_parameters;
+    /** \brief group transformations are NxN matrices */
+    static const int N = Base::N;
+    /** \brief group transfomation type */
+    typedef typename Base::Transformation Transformation;
+    /** \brief point type */
+    typedef typename Base::Point Point;
+    /** \brief tangent vector type */
+    typedef typename Base::Tangent Tangent;
+    /** \brief adjoint transformation type */
+    typedef typename Base::Adjoint Adjoint;
 
-        EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR (Map)
+    EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR (Map)
 
-        using Base::operator*=;
-        using Base::operator*;
+    using Base::operator*=;
+    using Base::operator*;
 
-        inline Map(Scalar *coeffs)
-                : so3_(coeffs),
-                  translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
-        }
+    inline Map(Scalar
+    *coeffs)
+    :
 
-        /**
-         * \brief Mutator of SO3
-         */
-        inline SO3Reference
+    so3_ (coeffs),
+    translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
+    }
 
-        so3() {
-            return so3_;
-        }
+    /**
+     * \brief Mutator of SO3
+     */
+    inline SO3Reference
 
-        /**
-         * \brief Accessor of SO3
-         */
-        inline ConstSO3Reference
+    so3() {
+        return so3_;
+    }
 
-        so3() const {
-            return so3_;
-        }
+    /**
+     * \brief Accessor of SO3
+     */
+    inline ConstSO3Reference
 
-        /**
-         * \brief Mutator of translation vector
-         */
-        inline TranslationReference
+    so3() const {
+        return so3_;
+    }
 
-        translation() {
-            return translation_;
-        }
+    /**
+     * \brief Mutator of translation vector
+     */
+    inline TranslationReference
 
-        /**
-         * \brief Accessor of translation vector
-         */
-        inline ConstTranslationReference
+    translation() {
+        return translation_;
+    }
 
-        translation() const {
-            return translation_;
-        }
+    /**
+     * \brief Accessor of translation vector
+     */
+    inline ConstTranslationReference
+
+    translation() const {
+        return translation_;
+    }
 
     protected:
-        Map<Sophus::SO3Group<Scalar>, _Options> so3_;
-        Map<Matrix<Scalar, 3, 1>, _Options>
-                translation_;
-    };
+    Map<Sophus::SO3Group<Scalar>, _Options> so3_;
+    Map<Matrix < Scalar, 3, 1>, _Options>
+    translation_;
+};
 
 /**
  * \brief Specialisation of Eigen::Map for const SE3GroupBase
@@ -875,74 +883,74 @@ namespace Eigen {
  * Allows us to wrap SE3 Objects around POD array
  * (e.g. external c style quaternion)
  */
-    template<typename _Scalar, int _Options>
-    class Map<const Sophus::SE3Group<_Scalar>, _Options>
-            : public Sophus::SE3GroupBase<
-                    Map<const Sophus::SE3Group<_Scalar>, _Options> > {
-        typedef Sophus::SE3GroupBase<Map<const Sophus::SE3Group<_Scalar>, _Options> >
-                Base;
+template<typename _Scalar, int _Options>
+class Map<const Sophus::SE3Group<_Scalar>, _Options>
+        : public Sophus::SE3GroupBase<
+                Map<const Sophus::SE3Group<_Scalar>, _Options> > {
+    typedef Sophus::SE3GroupBase<Map<const Sophus::SE3Group<_Scalar>, _Options> >
+            Base;
 
-    public:
-        /** \brief scalar type */
-        typedef typename internal::traits<Map>::Scalar Scalar;
-        /** \brief translation const reference type */
-        typedef const typename internal::traits<Map>::TranslationType &
-                ConstTranslationReference;
-        /** \brief SO3 const reference type */
-        typedef const typename internal::traits<Map>::SO3Type &
-                ConstSO3Reference;
+public:
+    /** \brief scalar type */
+    typedef typename internal::traits<Map>::Scalar Scalar;
+    /** \brief translation const reference type */
+    typedef const typename internal::traits<Map>::TranslationType &
+            ConstTranslationReference;
+    /** \brief SO3 const reference type */
+    typedef const typename internal::traits<Map>::SO3Type &
+            ConstSO3Reference;
 
-        /** \brief degree of freedom of group */
-        static const int DoF = Base::DoF;
-        /** \brief number of internal parameters used */
-        static const int num_parameters = Base::num_parameters;
-        /** \brief group transformations are NxN matrices */
-        static const int N = Base::N;
-        /** \brief group transfomation type */
-        typedef typename Base::Transformation Transformation;
-        /** \brief point type */
-        typedef typename Base::Point Point;
-        /** \brief tangent vector type */
-        typedef typename Base::Tangent Tangent;
-        /** \brief adjoint transformation type */
-        typedef typename Base::Adjoint Adjoint;
+    /** \brief degree of freedom of group */
+    static const int DoF = Base::DoF;
+    /** \brief number of internal parameters used */
+    static const int num_parameters = Base::num_parameters;
+    /** \brief group transformations are NxN matrices */
+    static const int N = Base::N;
+    /** \brief group transfomation type */
+    typedef typename Base::Transformation Transformation;
+    /** \brief point type */
+    typedef typename Base::Point Point;
+    /** \brief tangent vector type */
+    typedef typename Base::Tangent Tangent;
+    /** \brief adjoint transformation type */
+    typedef typename Base::Adjoint Adjoint;
 
-        EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR (Map)
+    EIGEN_INHERIT_ASSIGNMENT_EQUAL_OPERATOR (Map)
 
-        using Base::operator*=;
-        using Base::operator*;
+    using Base::operator*=;
+    using Base::operator*;
 
-        inline Map(const Scalar *coeffs)
-                : so3_(coeffs),
-                  translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
-        }
+    inline Map(const Scalar *coeffs)
+            : so3_(coeffs),
+              translation_(coeffs + Sophus::SO3Group<Scalar>::num_parameters) {
+    }
 
-        inline Map(const Scalar *trans_coeffs, const Scalar *rot_coeffs)
-                : translation_(trans_coeffs), so3_(rot_coeffs) {
-        }
+    inline Map(const Scalar *trans_coeffs, const Scalar *rot_coeffs)
+            : translation_(trans_coeffs), so3_(rot_coeffs) {
+    }
 
-        /**
-         * \brief Accessor of SO3
-         */
-        inline ConstSO3Reference
+    /**
+     * \brief Accessor of SO3
+     */
+    inline ConstSO3Reference
 
-        so3() const {
-            return so3_;
-        }
+    so3() const {
+        return so3_;
+    }
 
-        /**
-         * \brief Accessor of translation vector
-         */
-        inline ConstTranslationReference
+    /**
+     * \brief Accessor of translation vector
+     */
+    inline ConstTranslationReference
 
-        translation() const {
-            return translation_;
-        }
+    translation() const {
+        return translation_;
+    }
 
-    protected:
-        const Map<const Sophus::SO3Group<Scalar>, _Options> so3_;
-        const Map<const Matrix<Scalar, 3, 1>, _Options> translation_;
-    };
+protected:
+    const Map<const Sophus::SO3Group<Scalar>, _Options> so3_;
+    const Map<const Matrix<Scalar, 3, 1>, _Options> translation_;
+};
 
 }
 

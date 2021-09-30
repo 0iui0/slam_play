@@ -97,14 +97,18 @@ typedef Eigen::Quaterniond Qd;
 typedef Eigen::Quaternionf Qf;
 
 // Vector of Eigen vectors
-typedef std::vector<Vec2, Eigen::aligned_allocator<Vec2>> VecVec2;
-typedef std::vector<Vec3, Eigen::aligned_allocator<Vec3>> VecVec3;
-typedef std::vector<Vec2f, Eigen::aligned_allocator<Vec2f>> VecVec2f;
-typedef std::vector<Vec3f, Eigen::aligned_allocator<Vec3f>> VecVec3f;
+typedef std::vector<Vec2, Eigen::aligned_allocator < Vec2>>
+VecVec2;
+typedef std::vector<Vec3, Eigen::aligned_allocator < Vec3>>
+VecVec3;
+typedef std::vector<Vec2f, Eigen::aligned_allocator < Vec2f>>
+VecVec2f;
+typedef std::vector<Vec3f, Eigen::aligned_allocator < Vec3f>>
+VecVec3f;
 
 // Map of Eigen matrix
-typedef std::map<unsigned long, MatXX, std::less<unsigned long>, Eigen::aligned_allocator<MatXX>> MapMatXX;
-
+typedef std::map<unsigned long, MatXX, std::less<unsigned long>, Eigen::aligned_allocator < MatXX>>
+MapMatXX;
 
 
 #endif

@@ -91,7 +91,7 @@ int main() {
     }
     Eigen::Matrix4d DTD = D.transpose() * D;
     // SVD分解
-    Eigen::JacobiSVD<Eigen::MatrixXd> svd(DTD, Eigen::ComputeThinU | Eigen::ComputeThinV);
+    Eigen::JacobiSVD <Eigen::MatrixXd> svd(DTD, Eigen::ComputeThinU | Eigen::ComputeThinV);
     Eigen::MatrixXd V, S, U;
     V = svd.matrixV();
     U = svd.matrixU();

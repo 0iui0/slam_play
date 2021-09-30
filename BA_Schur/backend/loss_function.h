@@ -8,7 +8,7 @@
 #include "backend/eigen_types.h"
 
 namespace myslam {
-namespace backend {
+    namespace backend {
 
 /**
  * loss function 即鲁棒核函数
@@ -19,14 +19,14 @@ namespace backend {
  *
  * LossFunction是各核函数的基类，它可以派生出各种Loss
  */
-class LossFunction {
-public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+        class LossFunction {
+        public:
+            EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
-    virtual ~LossFunction() {}
+            virtual ~LossFunction() {}
 
-    virtual double Compute(double error) const = 0;
-};
+            virtual double Compute(double error) const = 0;
+        };
 
 /**
  * 平凡的Loss，不作任何处理
@@ -34,10 +34,10 @@ public:
  *
  * TrivalLoss(e) = e^2
  */
-class TrivalLoss : public LossFunction {
-public:
-    virtual double Compute(double error) const override { return error * error; }
-};
+        class TrivalLoss : public LossFunction {
+        public:
+            virtual double Compute(double error) const override { return error * error; }
+        };
 
 /**
  * Huber loss
@@ -45,20 +45,20 @@ public:
  * Huber(e) = e^2                      if e <= delta
  * huber(e) = delta*(2*e - delta)      if e > delta
  */
-class HuberLoss : public LossFunction {
-public:
-    explicit HuberLoss(double delta) : delta_(delta) {}
+        class HuberLoss : public LossFunction {
+        public:
+            explicit HuberLoss(double delta) : delta_(delta) {}
 
-    virtual ~HuberLoss() {}
+            virtual ~HuberLoss() {}
 
-    virtual double Compute(double error) const override;
+            virtual double Compute(double error) const override;
 
-private:
-    double delta_;
+        private:
+            double delta_;
 
-};
+        };
 
-}
+    }
 }
 
 #endif //MYSLAM_LOSS_FUNCTION_H

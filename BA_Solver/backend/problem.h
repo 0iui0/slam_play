@@ -41,7 +41,7 @@ namespace myslam {
 
             ~Problem();
 
-            bool AddVertex(const std::shared_ptr<Vertex>& vertex);
+            bool AddVertex(const std::shared_ptr<Vertex> &vertex);
 
             /**
              * remove a vertex
@@ -49,7 +49,7 @@ namespace myslam {
              */
             bool RemoveVertex(std::shared_ptr<Vertex> vertex);
 
-            bool AddEdge(const std::shared_ptr<Edge>& edge);
+            bool AddEdge(const std::shared_ptr<Edge> &edge);
 
             bool RemoveEdge(std::shared_ptr<Edge> edge);
 

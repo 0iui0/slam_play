@@ -128,7 +128,7 @@ namespace myslam {
 
             // 这里要 remove 该顶点对应的 edge.
             vector<shared_ptr<Edge>> remove_edges = GetConnectedEdges(vertex);
-            for (auto &remove_edge : remove_edges) {
+            for (auto &remove_edge: remove_edges) {
                 RemoveEdge(remove_edge);
             }
 
@@ -240,8 +240,8 @@ namespace myslam {
                     debug += vertex.second->LocalDimension();
                 }
 
-                if (problemType_ == ProblemType::SLAM_PROBLEM)    // 如果是 slam 问题，还要分别统计 pose 和 landmark 的维数，后面会对他们进行排序
-                {
+                if (problemType_ == ProblemType::SLAM_PROBLEM) {   // 如果是 slam 问题，还要分别统计 pose 和 landmark 的维数，后面会对他们进行排序
+
                     AddOrderingSLAM(vertex.second);
                 }
 
@@ -254,7 +254,7 @@ namespace myslam {
             if (problemType_ == ProblemType::SLAM_PROBLEM) {
                 // 这里要把 landmark 的 ordering 加上 pose 的数量，就保持了 landmark 在后,而 pose 在前
                 ulong all_pose_dimension = ordering_poses_;
-                for (const auto &landmarkVertex : idx_landmark_vertices_) {
+                for (const auto &landmarkVertex: idx_landmark_vertices_) {
                     landmarkVertex.second->SetOrderingId(
                             landmarkVertex.second->OrderingId() + all_pose_dimension
                     );
@@ -379,7 +379,7 @@ namespace myslam {
 
                 // Hmm 是对角线矩阵，它的求逆可以直接为对角线块分别求逆，如果是逆深度，对角线块为1维的，则直接为对角线的倒数，这里可以加速
                 MatXX Hmm_inv(MatXX::Zero(marg_size, marg_size));
-                for (const auto &landmarkVertex : idx_landmark_vertices_) {
+                for (const auto &landmarkVertex: idx_landmark_vertices_) {
                     int idx = landmarkVertex.second->OrderingId() - reserve_size;
                     int size = landmarkVertex.second->LocalDimension();
                     Hmm_inv.block(idx, idx, size, size) = Hmm.block(idx, idx, size, size).inverse();
@@ -603,7 +603,7 @@ namespace myslam {
             int n2 = reserve_size - dim;   // 剩余变量的维度
             Eigen::MatrixXd Amm = 0.5 * (H_marg.block(n2, n2, m2, m2) + H_marg.block(n2, n2, m2, m2).transpose());
 
-            Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> saes(Amm);
+            Eigen::SelfAdjointEigenSolver <Eigen::MatrixXd> saes(Amm);
             Eigen::MatrixXd Amm_inv = saes.eigenvectors() * Eigen::VectorXd(
                     (saes.eigenvalues().array() > eps).select(saes.eigenvalues().array().inverse(), 0)).asDiagonal() *
                                       saes.eigenvectors().transpose();
